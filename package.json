@@ -1,0 +1,24 @@
+{
+  "name": "devpulse",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/api",
+    "apps/dashboard"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:dashboard": "npm run dev --workspace=apps/dashboard"
+  },
+  "allowScripts": {
+    "@prisma/client@5.22.0": true,
+    "prisma@5.22.0": true,
+    "@prisma/engines@5.22.0": true,
+    "esbuild@0.28.2": true,
+    "esbuild@0.21.5": true,
+    "fsevents@2.3.3": true
+  }
+}

@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Source {
+  id        String   @id @default(cuid())
+  name      String
+  apiKey    String   @unique
+  createdAt DateTime @default(now())
+  logs      Log[]
+  rules     Rule[]
+}
+
+model Log {
+  id        String   @id @default(cuid())
+  sourceId  String
+  source    Source   @relation(fields: [sourceId], references: [id])
+  level     String
+  message   String
+  meta      Json?
+  createdAt DateTime @default(now())
+
+  @@index([sourceId, level, createdAt])
+}
+
+model Rule {
+  id              String    @id @default(cuid())
+  sourceId        String
+  source          Source    @relation(fields: [sourceId], references: [id])
+  name            String
+  level           String
+  thresholdCount  Int
+  windowMinutes   Int
+  cooldownMinutes Int       @default(15)
+  lastFiredAt     DateTime?
+  active          Boolean   @default(true)
+}
+
+model AlertLog {
+  id      String   @id @default(cuid())
+  ruleId  String
+  firedAt DateTime @default(now())
+  channel String
+  status  String
+}
